@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useDebounce from "../hook/useDebounce";
+
 const ListPage = () => {
   const ref = useRef(null);
   const navigate = useNavigate();
@@ -19,7 +20,11 @@ const ListPage = () => {
   const observer = useRef(
     new IntersectionObserver((entries) => {
       const first = entries[0];
-      if (first.isIntersecting && mappedData.length % 9 === 0) {
+      if (
+        first.isIntersecting &&
+        data.length > 0 &&
+        data?.every((v) => v.length > 0)
+      ) {
         setPage((no) => no + 1);
       }
     })
