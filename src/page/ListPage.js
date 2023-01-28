@@ -19,7 +19,7 @@ const ListPage = () => {
   const observer = useRef(
     new IntersectionObserver((entries) => {
       const first = entries[0];
-      if (first.isIntersecting) {
+      if (first.isIntersecting && mappedData.length % 9 === 0) {
         setPage((no) => no + 1);
       }
     })
@@ -38,15 +38,17 @@ const ListPage = () => {
   }, [debouncedValue, page]);
 
   useEffect(() => {
-    if (mappedData.length % 9 === 0) {
-      getData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getData();
   }, [getData]);
 
   useEffect(() => {
+    setData([]);
     setPage(0);
-    navigate({ search: `?term=${debouncedValue}` }, { replace: true });
+    navigate(
+      { search: `?term=${debouncedValue}` },
+      { replace: true, preventScrollReset: false }
+    );
+    window.scrollTo({ top: 0 });
   }, [debouncedValue, navigate]);
 
   useEffect(() => {
@@ -159,8 +161,8 @@ const ListPage = () => {
             </svg>
           </div>
         )}
-        <div ref={ref} />
       </div>
+      <div ref={ref} />
     </>
   );
 };
