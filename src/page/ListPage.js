@@ -12,6 +12,10 @@ const ListPage = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const mappedData = useMemo(() => {
+    return data.reduce((v, c) => [...v, ...c], []);
+  }, [data]);
+
   const observer = useRef(
     new IntersectionObserver((entries) => {
       const first = entries[0];
@@ -34,7 +38,10 @@ const ListPage = () => {
   }, [debouncedValue, page]);
 
   useEffect(() => {
-    getData();
+    if (mappedData.length % 9 === 0) {
+      getData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getData]);
 
   useEffect(() => {
@@ -56,9 +63,6 @@ const ListPage = () => {
       }
     };
   }, []);
-  const mappedData = useMemo(() => {
-    return data.reduce((v, c) => [...v, ...c], []);
-  }, [data]);
 
   return (
     <>
